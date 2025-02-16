@@ -10,9 +10,9 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV 
 
-# params = { 'n_estimators': [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
-#           'max_depth': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-#           'min_samples_split': [2, 3, 4, 5, 6, 7, 8, 9, 10],}
+params = { 'n_estimators': [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+          'max_depth': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          'min_samples_split': [2, 3, 4, 5, 6, 7, 8, 9, 10],}
 
 
 path = '/home/syedafeezu/PROJECTS/PRACTICES/titanic_train.csv'
