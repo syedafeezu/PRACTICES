@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 import xgboost as xgb
-
+import joblib
 
 # Load the dataset
 data = pd.read_csv('weather_data.csv')
@@ -13,8 +13,9 @@ data = pd.read_csv('weather_data.csv')
 # Drop unnecessary columns
 data = data.drop(['date', 'date_id', 'day_date', 'day_name', 'Start_hour', 'End_hour'], axis=1)
 
-# Handle missing values (if any)
-data = data.fillna(data.mean())
+# Handle missing values (only for numeric columns)
+numeric_columns = data.select_dtypes(include=[np.number]).columns
+data[numeric_columns] = data[numeric_columns].fillna(data[numeric_columns].mean())
 
 # Convert categorical variables to numerical using one-hot encoding
 data = pd.get_dummies(data, columns=['desc'], drop_first=True)
@@ -44,7 +45,6 @@ y_pred_rf = rf_model.predict(X_test)
 mse_rf = mean_squared_error(y_test, y_pred_rf)
 print(f'Random Forest Mean Squared Error: {mse_rf}')
 
-
 # Initialize the XGBoost Regressor
 xgb_model = xgb.XGBRegressor(n_estimators=100, learning_rate=0.1, random_state=42)
 
@@ -61,18 +61,11 @@ print(f'XGBoost Mean Squared Error: {mse_xgb}')
 # Compare the performance of the two models
 if mse_rf < mse_xgb:
     print("Random Forest performs better.")
-else:
-    print("XGBoost performs better.")
-    
-    
-import joblib
-
-# Save the best model
-if mse_rf < mse_xgb:
     joblib.dump(rf_model, 'best_weather_model.pkl')
 else:
+    print("XGBoost performs better.")
     joblib.dump(xgb_model, 'best_weather_model.pkl')
-    
+
 # Load the model
 model = joblib.load('best_weather_model.pkl')
 
